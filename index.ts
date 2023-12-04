@@ -1,24 +1,15 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { Resend } from "npm:resend";
 
-const RESEND_API_KEY = "re_123456789";
+const resend = new Resend("re_123456789");
 
-const handler = async (_request: Request): Promise<Response> => {
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${RESEND_API_KEY}`,
-    },
-    body: JSON.stringify({
-      from: "Acme <onboarding@resend.dev>",
-      to: ["delivered@resend.dev"],
-      subject: "hello world",
-      html: "<strong>it works!</strong>",
-    }),
-  });
-
-  if (res.ok) {
-    const data = await res.json();
+Deno.serve(() => {
+  try {
+    const data = await resend.emails.send({
+      from: 'Acme <onboarding@resend.dev>',
+      to: ['delivered@resend.dev'],
+      subject: 'Hello World',
+      html: '<strong>It works!</strong>'
+    });
 
     return new Response(data, {
       status: 200,
@@ -26,7 +17,10 @@ const handler = async (_request: Request): Promise<Response> => {
         "Content-Type": "application/json",
       },
     });
+  } catch (error) {
+    console.error(error);
+    return new Response(null, {
+      status: 500,
+    });
   }
-};
-
-serve(handler);
+});
