@@ -2,7 +2,7 @@ import { Resend } from "npm:resend";
 
 const resend = new Resend("re_123456789");
 
-Deno.serve(() => {
+Deno.serve(async () => {
   try {
     const data = await resend.emails.send({
       from: 'Acme <onboarding@resend.dev>',
