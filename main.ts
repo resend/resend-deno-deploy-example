@@ -4,15 +4,15 @@ const resend = new Resend("re_123456789");
 
 Deno.serve(async () => {
   try {
-    const data = await resend.emails.send({
+    const response = await resend.emails.send({
       from: 'Acme <onboarding@resend.dev>',
       to: ['delivered@resend.dev'],
       subject: 'Hello World',
       html: '<strong>It works!</strong>'
     });
 
-    return new Response(data, {
-      status: 200,
+    return new Response(response, {
+      status: response.error ? 500 : 200,
       headers: {
         "Content-Type": "application/json",
       },
