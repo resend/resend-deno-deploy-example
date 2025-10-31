@@ -11,7 +11,7 @@ Deno.serve(async () => {
       html: '<strong>It works!</strong>'
     });
 
-    return new Response(response, {
+    return new Response(JSON.stringify(response), {
       status: response.error ? 500 : 200,
       headers: {
         "Content-Type": "application/json",
